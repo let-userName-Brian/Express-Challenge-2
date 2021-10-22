@@ -17,14 +17,18 @@ app.get('/', (req, res) => {
 
 
 //getting All sudents and searched student
-app.get('/students', (req, res) =>{
-    console.log(`On the ${req.path} page`)
-    res.send('students page')
+app.get('/students', (req, res) => {
+    // GET /students - returns a list of all students
+    // this endpoint, optionally, accepts query parameters
+    // GET /students?search=<query> - returns a list of students filtered on name matching the given query
     if (req.query.search) {
-        console.log(`Here are all our students you requested: ${req.query.search}`);
-        res.send(`${req.query.search}`)
+      let name = decodeURIComponent(req.query.search);
+      let result = students.filter(student => student.name.includes(name))
+      res.send(result)
+    } else {
+      res.send(students)
     }
-});
+  });
 
 //student by ID
 app.get('/students/:studentId', (req, res)=>{
